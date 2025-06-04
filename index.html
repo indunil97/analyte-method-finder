@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyte Method Finder</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f7fa;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .method-box {
+      margin-bottom: 15px;
+    }
+    .method-box h3 {
+      margin: 10px 0 5px;
+      color: #34495e;
+    }
+    .method-box ul {
+      list-style: none;
+      padding-left: 15px;
+    }
+    .method-box ul li::before {
+      content: '📄 ';
+    }
+    .no-data {
+      color: #999;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Analyte Method Finder 🔬</h1>
+  <div class="container">
+    <input type="text" id="analyteInput" placeholder="Enter analyte name (e.g. Benzene)" onkeyup="findMethods()">
 
+    <div class="method-box">
+      <h3>NIOSH Methods</h3>
+      <ul id="nioshList"></ul>
+    </div>
+
+    <div class="method-box">
+      <h3>OSHA Methods</h3>
+      <ul id="oshaList"></ul>
+    </div>
+
+    <div class="method-box">
+      <h3>ASTM Methods</h3>
+      <ul id="astmList"></ul>
+    </div>
+
+    <div class="method-box">
+      <h3>Indian Standards (IS)</h3>
+      <ul id="isList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const methods = {
+      "benzene": {
+        niosh: ["NIOSH 1501", "NIOSH 3700"],
+        osha: ["OSHA 12", "OSHA PV2120"],
+        astm: ["ASTM D6229"],
+        is: ["IS 5182 Part 6"]
+      },
+      "lead": {
+        niosh: ["NIOSH 7082", "NIOSH 7300"],
+        osha: ["OSHA ID-121"],
+        astm: ["ASTM D4185"],
+        is: ["IS 3025 Part 47"]
+      },
+      "ammonia": {
+        niosh: ["NIOSH 6015"],
+        osha: ["OSHA ID-188"],
+        astm: ["ASTM D1426"],
+        is: ["IS 3025 Part 34"]
+      }
+    };
+
+    function findMethods() {
+      const input = document.getElementById("analyteInput").value.toLowerCase().trim();
+      const result = methods[input];
+
+      displayList("nioshList", result?.niosh);
+      displayList("oshaList", result?.osha);
+      displayList("astmList", result?.astm);
+      displayList("isList", result?.is);
+    }
+
+    function displayList(elementId, items) {
+      const ul = document.getElementById(elementId);
+      ul.innerHTML = '';
+
+      if (items && items.length > 0) {
+        items.forEach(method => {
+          const li = document.createElement("li");
+          li.textContent = method;
+          ul.appendChild(li);
+        });
+      } else {
+        ul.innerHTML = '<li class="no-data">No method found</li>';
+      }
+    }
+  </script>
+</body>
+</html>
